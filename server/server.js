@@ -62,8 +62,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`IBM StudyMate server running on port ${PORT}`);
-  console.log(`AI Mode: ${process.env.USE_MOCK_AI === 'true' ? 'MOCK (development)' : 'IBM watsonx.ai (production)'}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`IBM StudyMate server running on port ${PORT}`);
+    console.log(`AI Mode: ${process.env.USE_MOCK_AI === 'true' ? 'MOCK (development)' : 'IBM watsonx.ai (production)'}`);
+  });
+}
+
+module.exports = app;
+
