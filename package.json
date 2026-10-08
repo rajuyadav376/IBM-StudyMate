@@ -4,11 +4,11 @@
   "description": "IBM StudyMate – AI-Powered Personalized Learning Platform",
   "private": true,
   "scripts": {
+    "start": "npm start --prefix server",
+    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
     "install:all": "npm install --prefix server && npm install --prefix client",
     "seed": "npm run seed --prefix server",
-    "server": "npm start --prefix server",
     "server:dev": "npm run dev --prefix server",
-    "client": "npm start --prefix client",
-    "build:client": "npm run build --prefix client"
+    "client": "npm start --prefix client"
   }
 }
