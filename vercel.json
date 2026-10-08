@@ -1,22 +1,26 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": "client/build",
-  "installCommand": "npm install --prefix server && npm install --prefix client",
-  "framework": null,
   "builds": [
     {
       "src": "server/server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "server/server.js" },
-    { "src": "/static/(.*)", "dest": "/static/$1" },
-    { "src": "/(.*\\.(js|css|ico|png|jpg|svg|json|map)$)", "dest": "client/build/$1" },
-    { "src": "/(.*)", "dest": "server/server.js" }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+    {
+      "src": "/api/(.*)",
+      "dest": "server/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/$1"
+    }
+  ]
 }
