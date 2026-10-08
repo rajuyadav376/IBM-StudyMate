@@ -15,16 +15,19 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
-// Connect to MongoDB
-connectDB();
-
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: process.env.CLIENT_URL || true,
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Ensure DB connection for every request (essential for serverless & production)
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -66,9 +69,8 @@ if (process.env.NODE_ENV !== 'test') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
     console.log(`IBM StudyMate server running on port ${PORT}`);
-    console.log(`AI Mode: ${process.env.USE_MOCK_AI === 'true' ? 'MOCK (development)' : 'IBM watsonx.ai (production)'}`);
+    console.log(`AI Mode: ${process.env.USE_MOCK_AI === 'true' || !process.env.IBM_API_KEY ? 'MOCK (development)' : 'IBM watsonx.ai (production)'}`);
   });
 }
 
 module.exports = app;
-

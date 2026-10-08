@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
+const getJwtSecret = () => process.env.JWT_SECRET || 'ibm_studymate_jwt_secret_change_in_production';
+
 // Verify JWT and attach user to request
 const protect = async (req, res, next) => {
   let token;
@@ -14,7 +16,7 @@ const protect = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
     req.user = await User.findById(decoded.id).select('-password');
 
     if (!req.user) {
